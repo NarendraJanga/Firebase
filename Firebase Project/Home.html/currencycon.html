@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 8px;
+        }
+
+        button {
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <div class="input-container">
+            <input type="number" id="amount" placeholder="Enter amount">
+            <select id="from">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <img id="fromFlag" src="" alt="Flag" style="width: 32px; height: 32px; margin-right: 10px;">
+            <span>to</span>
+            <select id="to">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <img id="toFlag" src="" alt="Flag" style="width: 32px; height: 32px; margin-left: 10px;">
+            <button id="convertBtn">Convert</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // script.js
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const convertBtn = document.getElementById('convertBtn');
+            const amountInput = document.getElementById('amount');
+            const fromSelect = document.getElementById('from');
+            const toSelect = document.getElementById('to');
+            const resultDiv = document.getElementById('result');
+            const fromFlag = document.getElementById('fromFlag');
+            const toFlag = document.getElementById('toFlag');
+
+            // Function to map currency codes to country codes
+            function currencyToCountryCode(currencyCode) {
+                const currencyMap = {
+                    USD: 'US',
+                    EUR: 'EU',
+                    GBP: 'GB',
+                    // Add more mappings as needed
+                };
+                return currencyMap[currencyCode] || '';
+            }
+
+            // Fetch list of currencies from API
+            fetch('https://api.exchangerate-api.com/v4/latest/USD')
+                .then(response => response.json())
+                .then(data => {
+                    const currencies = Object.keys(data.rates);
+                    currencies.forEach(currency => {
+                        const option1 = document.createElement('option');
+                        option1.value = currency;
+                        option1.textContent = currency;
+                        fromSelect.appendChild(option1);
+
+                        const option2 = document.createElement('option');
+                        option2.value = currency;
+                        option2.textContent = currency;
+                        toSelect.appendChild(option2);
+                    });
+                });
+
+            convertBtn.addEventListener('click', () => {
+                const amount = parseFloat(amountInput.value);
+                const fromCurrency = fromSelect.value;
+                const toCurrency = toSelect.value;
+
+                if (isNaN(amount)) {
+                    resultDiv.textContent = 'Please enter a valid amount.';
+                    return;
+                }
+
+                fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`)
+                    .then(response => response.json())  
+                    .then(data => {
+                        const exchangeRate = data.rates[toCurrency];
+                        if (exchangeRate) {
+                            const convertedAmount = amount * exchangeRate;
+                            resultDiv.textContent = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+                            fromFlag.src = `https://www.countryflags.io/${currencyToCountryCode(fromCurrency)}/flat/32.png`;
+                            toFlag.src = `https://www.countryflags.io/${currencyToCountryCode(toCurrency)}/flat/32.png`;
+                        } else {
+                            resultDiv.textContent = 'Conversion not available for selected currencies.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        resultDiv.textContent = 'Error fetching data. Please try again later.';
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

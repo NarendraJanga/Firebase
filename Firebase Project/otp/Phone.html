@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Login with Firebase</title>
+  <!-- Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script>
+  <!-- Your custom JavaScript -->
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Phone Login</h2>
+        <div id="phone-login-form">
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" class="form-control" required>
+          </div>
+          <button id="sendCodeButton" class="btn btn-primary btn-block" onclick="sendCodeButton()">Send Verification Code</button>
+        </div>
+        <div id="code-verification-form" style="display: none;">
+          <div class="form-group">
+            <label for="verificationCode">Verification Code:</label>
+            <input type="text" id="verificationCode" class="form-control" required>
+          </div>
+          <button id="verifyCodeButton" class="btn btn-success btn-block">Verify Code</button>
+        </div>
+        <div id="login-status"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCQNy3E_yW1jHoihEdHC2o_NyOg0i1VeZQ",
+      authDomain: "phone-b627b.firebaseapp.com",
+      projectId: "phone-b627b",
+      storageBucket: "phone-b627b.appspot.com",
+      messagingSenderId: "384786115563",
+      appId: "1:384786115563:web:2e8d069688924a01d047ae"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth=getAuth(app);
+
+// Phone Login
+const phoneLoginForm = document.getElementById('phone-login-form');
+const codeVerificationForm = document.getElementById('code-verification-form');
+const loginStatus = document.getElementById('login-status');
+
+let phoneNumber;
+let verificationId;
+
+const sendCodeButton = document.getElementById('sendCodeButton');
+sendCodeButton.addEventListener('click', () => {
+  phoneNumber = document.getElementById('phoneNumber').value;
+  const phoneProvider = new firebase.auth.PhoneAuthProvider();
+  phoneProvider.verifyPhoneNumber(phoneNumber, new firebase.auth.RecaptchaVerifier('recaptcha-container'))
+    .then((vid) => {
+      verificationId = vid;
+      phoneLoginForm.style.display = 'none';
+      codeVerificationForm.style.display = 'block';
+      loginStatus.innerText = 'Verification code sent to ' + phoneNumber;
+    })
+    .catch((error) => {
+    //   console.error("Error sending verification code:", error);
+      loginStatus.innerText = 'Error sending verification code';
+      alert(error)
+    });
+});
+
+const verifyCodeButton = document.getElementById('verifyCodeButton');
+verifyCodeButton.addEventListener('click', () => {
+  const verificationCode = document.getElementById('verificationCode').value;
+  const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+  firebase.auth().signInWithCredential(credential)
+    .then((userCredential) => {
+      console.log("Phone number authenticated:", userCredential.user.phoneNumber);
+      loginStatus.innerText = 'Phone number authenticated: ' + userCredential.user.phoneNumber;
+    })
+    .catch((error) => {
+      console.error("Error authenticating phone number:", error);
+      loginStatus.innerText = 'Error authenticating phone number';
+    });
+});
+</script>

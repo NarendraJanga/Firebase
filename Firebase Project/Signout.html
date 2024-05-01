@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Out Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-image: url('/asset/image/back3.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+
+        }
+
+        nav {
+            background: radial-gradient(#5441ce, #7868e6);
+            padding: 20px;
+        }
+
+        /* Style for the navigation links */
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for the navigation links */
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Style for the active navigation link */
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .bd {
+            background: linear-gradient(to right, indigo, violet);
+
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="http://127.0.0.1:5500/src/whether/Whether.html">Whether</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a id="signOut" class="nav-link" href="#">Sign Out <i class="fas fa-sign-out-alt"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center bd ">
+        <img src="/asset/image/tree.jpg" alt="Tree Icon" class="icon">
+        <h1>Welcome!</h1>
+        <p>Please sign in to continue.</p>
+        <p id="matter" class="btn btn-warning btn-outline-danger"></p><br><br>
+
+        <button id="button" type="button" class="btn btn-info " onclick="generate()">click me</button>
+
+        <!-- Bootstrap JS (optional if you want to use Bootstrap's JS features) -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <!-- Font Awesome JS (optional if you want to use Font Awesome's JS features) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+        <!-- Custom JavaScript -->
+        <script>
+            const quotes = [
+                "1. The only way to do great work is to love what you do. ❤️ - Steve Jobs",
+                "2. In the midst of winter, I found there was, within me, an invincible summer. ☀️ - Albert Camus",
+                "3. Believe you can and you're halfway there. 🌟 - Theodore Roosevelt",
+                "4. The only limit to our realization of tomorrow will be our doubts of today. 🌈 - Franklin D. Roosevelt",
+                "5. Success is not final, failure is not fatal: It is the courage to continue that counts. 💪 - Winston Churchill",
+                "6. Life is what happens when you're busy making other plans. 🌸 - John Lennon",
+                "7. The greatest glory in living lies not in never falling, but in rising every time we fall. 🌟 - Nelson Mandela",
+                "8. I have not failed. I've just found 10,000 ways that won't work. 🛠️ - Thomas A. Edison",
+                "9. It does not matter how slowly you go as long as you do not stop. 🚀 - Confucius",
+                "10. The only impossible journey is the one you never begin. 🌟 - Tony Robbins",
+                "11. Life is either a daring adventure or nothing at all. 🌎 - Helen Keller",
+                "12. To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. 🌟 - Ralph Waldo Emerson",
+                "13. It is during our darkest moments that we must focus to see the light. 🕯️ - Aristotle Onassis",
+                "14. The future belongs to those who believe in the beauty of their dreams. ✨ - Eleanor Roosevelt",
+                "15. You miss 100% of the shots you don't take. 🏀 - Wayne Gretzky",
+                "16. The best revenge is massive success. 🚀 - Frank Sinatra",
+                "17. The only limit to our realization of tomorrow will be our doubts of today. 🌈 - Franklin D. Roosevelt",
+                "18. It always seems impossible until it is done. 🌟 - Nelson Mandela",
+                "19. Don't watch the clock; do what it does. Keep going. ⏰ - Sam Levenson",
+                "20. Your time is limited, don't waste it living someone else's life. ⏳ - Steve Jobs",
+                "21. If you want to lift yourself up, lift up someone else. 🌟 - Booker T. Washington",
+                "22. Success is not final, failure is not fatal: It is the courage to continue that counts. 💪 - Winston Churchill",
+                "23. Do not go where the path may lead, go instead where there is no path and leave a trail. 🚶 - Ralph Waldo Emerson",
+                "24. Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful. ❤️ - Albert Schweitzer",
+                "25. You are never too old to set another goal or to dream a new dream. 🌟 - C.S. Lewis",
+                "26. Believe you can and you're halfway there. 🌟 - Theodore Roosevelt",
+                "27. The only limit to our realization of tomorrow will be our doubts of today. 🌈 - Franklin D. Roosevelt",
+                "28. It always seems impossible until it is done. 🌟 - Nelson Mandela",
+                "29. The only way to do great work is to love what you do. ❤️ - Steve Jobs",
+                "30. The best revenge is massive success. 🚀 - Frank Sinatra"
+            ];
+
+            // Randomly select a quote
+            function generate() {
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                const randomQuote = quotes[randomIndex];
+                document.getElementById('matter').innerHTML = randomQuote
+            }
+
+
+        </script>
+</body>
+<script type="module" src="">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBE9VWOTlUaDHpeKIlXnA1QOSNF5e_em4A",
+        authDomain: "fir-web-login-50d27.firebaseapp.com",
+        databaseURL: "https://fir-web-login-50d27-default-rtdb.firebaseio.com",
+        projectId: "fir-web-login-50d27",
+        storageBucket: "fir-web-login-50d27.appspot.com",
+        messagingSenderId: "491942942834",
+        appId: "1:491942942834:web:195bd78431a6070e54caeb"
+    };
+    // Initialize Firebase 
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    auth.languageCode = 'en';
+const signOut=document.getElementById("signOut")
+signOut.addEventListener('click',(e)=>{
+    signOut(auth).then(() => {
+  window.location.href="http://127.0.0.1:5500/src/Firebase%20Project/out.html"
+}).catch((error) => {
+  // An error happened.
+});
+})
+</script>
+
+</html>
